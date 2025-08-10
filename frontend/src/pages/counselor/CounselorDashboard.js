@@ -15,12 +15,9 @@ import {
   Calendar as CalendarIcon,
   ExternalLink,
   Send,
-  Copy,
   X,
   ChevronLeft,
   ChevronRight,
-  Search,
-  Filter,
   LogOut,
 } from 'lucide-react';
 
@@ -35,7 +32,6 @@ export default function CounselorDashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [loadingStates, setLoadingStates] = useState({});
   
   // New states for meeting link modal
   const [showMeetingModal, setShowMeetingModal] = useState(false);
@@ -43,7 +39,7 @@ export default function CounselorDashboard() {
   const [meetingLinkInput, setMeetingLinkInput] = useState('');
   const [sendingLink, setSendingLink] = useState(false);
 
-    // New states for pagination and filtering
+  // New states for pagination and filtering
   const [currentPage, setCurrentPage] = useState(1);
   const [appointmentsPerPage, setAppointmentsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
@@ -204,7 +200,7 @@ export default function CounselorDashboard() {
     setSendingLink(true);
     
     try {
-      const response = await axios.post(`/api/appointments/${selectedAppointment._id}/send-meeting-link`, {
+      await axios.post(`/api/appointments/${selectedAppointment._id}/send-meeting-link`, {
         meetingLink: meetingLinkInput
       });
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Calendar, Video, MessageCircle, Clock, User, Phone, AlertCircle, Send } from "lucide-react"
 import ClientLayout from "../components/ClientLayout"
@@ -16,11 +16,76 @@ export default function SessionPage() {
   const messagesEndRef = useRef(null)
   const { socket, joinSession, sendMessage: socketSendMessage } = useSocket()
 
+  const fetchAppointment = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) {
+        alert("Please log in to access this session")
+        navigate("/login")
+        return
+      }
+
+      const response = await fetch(`/api/appointments/${id}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setAppointment(data)
+      } else {
+        alert("Failed to fetch appointment details")
+      }
+    } catch (error) {
+      console.error("Error fetching appointment:", error)
+      alert("Failed to fetch appointment details")
+    } finally {
+      setIsLoading(false)
+    }
+  }, [id, navigate])
+
+  const fetchMessages = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) return
+
+      const response = await fetch(`/api/messages/appointment/${id}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setMessages(data)
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error)
+    }
+  }, [id])
+
+  const markMessagesAsRead = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) return
+
+      await fetch(`/api/messages/mark-read/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+    } catch (error) {
+      console.error("Error marking messages as read:", error)
+    }
+  }, [id])
+
   useEffect(() => {
     fetchAppointment()
     fetchMessages()
     setSessionStartTime(new Date())
-  }, [id])
+  }, [fetchAppointment, fetchMessages])
 
   useEffect(() => {
     // Session timer
@@ -54,59 +119,10 @@ export default function SessionPage() {
         socket.off("receive-message")
       }
     }
-  }, [socket, appointment, id, joinSession])
+  }, [socket, appointment, id, joinSession, markMessagesAsRead])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  const fetchAppointment = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        alert("Please log in to access this session")
-        navigate("/login")
-        return
-      }
-
-      const response = await fetch(`/api/appointments/${id}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setAppointment(data)
-      } else {
-        alert("Failed to fetch appointment details")
-      }
-    } catch (error) {
-      console.error("Error fetching appointment:", error)
-      alert("Failed to fetch appointment details")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const fetchMessages = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) return
-
-      const response = await fetch(`/api/messages/appointment/${id}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setMessages(data)
-      }
-    } catch (error) {
-      console.error("Error fetching messages:", error)
-    }
   }
 
   const sendMessage = async () => {
@@ -151,26 +167,6 @@ export default function SessionPage() {
     } catch (error) {
       console.error("Error sending message:", error)
       alert("Failed to send message")
-    }
-  }
-
-  const markMessagesAsRead = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) return
-
-      await fetch("/api/messages/read", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          appointmentId: id
-        })
-      })
-    } catch (error) {
-      console.error("Error marking messages as read:", error)
     }
   }
 

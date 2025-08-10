@@ -5,7 +5,6 @@ import {
   MessageCircle, 
   Settings, 
   LogOut, 
-  User, 
   Home,
   Menu,
   X
@@ -16,10 +15,6 @@ const CounselorLayout = ({ children }) => {
   const [counselor, setCounselor] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-
-  useEffect(() => {
-    fetchCounselorProfile()
-  }, [])
 
   const fetchCounselorProfile = async () => {
     try {
@@ -46,6 +41,10 @@ const CounselorLayout = ({ children }) => {
       navigate("/login")
     }
   }
+
+  useEffect(() => {
+    fetchCounselorProfile()
+  }, [fetchCounselorProfile])
 
   const handleLogout = () => {
     localStorage.removeItem("token")
