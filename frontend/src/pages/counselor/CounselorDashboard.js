@@ -18,6 +18,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Search,
   LogOut,
 } from 'lucide-react';
 
