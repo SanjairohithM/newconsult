@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { MessageCircle, Calendar, Clock, User, Search, Filter } from "lucide-react"
+import { MessageCircle, Calendar, Clock, User, Search } from "lucide-react"
 import ClientLayout from "../../components/ClientLayout"
 
 const MessagesPage = () => {

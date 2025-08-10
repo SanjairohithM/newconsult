@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { Calendar, Video, MessageCircle, Clock, Star, Plus, Search, X, MapPin, Filter, ExternalLink, Copy, ChevronLeft, ChevronRight } from "lucide-react"
+import { Calendar, Video, MessageCircle, Clock, Star, Plus, Search, X, MapPin, Copy, ChevronLeft, ChevronRight } from "lucide-react"
 import ClientLayout from "../../components/ClientLayout"
 
 const ClientDashboard = () => {
@@ -39,7 +39,7 @@ const ClientDashboard = () => {
     if (isSearchOpen && counselors.length === 0) {
       fetchCounselors()
     }
-  }, [isSearchOpen])
+  }, [isSearchOpen, counselors.length])
 
   useEffect(() => {
     if (searchQuery.trim() === "") {

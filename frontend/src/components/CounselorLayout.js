@@ -16,35 +16,35 @@ const CounselorLayout = ({ children }) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const fetchCounselorProfile = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        navigate("/login")
-        return
-      }
-
-      const response = await fetch("/api/auth/me", {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setCounselor(data)
-      } else {
-        navigate("/login")
-      }
-    } catch (error) {
-      console.error("Error fetching counselor profile:", error)
-      navigate("/login")
-    }
-  }
-
   useEffect(() => {
+    const fetchCounselorProfile = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          navigate("/login")
+          return
+        }
+
+        const response = await fetch("/api/auth/me", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setCounselor(data)
+        } else {
+          navigate("/login")
+        }
+      } catch (error) {
+        console.error("Error fetching counselor profile:", error)
+        navigate("/login")
+      }
+    }
+
     fetchCounselorProfile()
-  }, [fetchCounselorProfile])
+  }, [navigate])
 
   const handleLogout = () => {
     localStorage.removeItem("token")
