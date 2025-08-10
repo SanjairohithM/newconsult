@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "build": "cd frontend && npm install && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "install:frontend": "cd frontend && npm install"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
