@@ -26,16 +26,24 @@ app.use((req, res, next) => {
 const server = http.createServer(app)
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:3000","http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      process.env.FRONTEND_URL || "http://localhost:3000"
+    ],
     methods: ["GET", "POST"],
+    credentials: true
   },
 })
 
 // Middleware
-//app.use(cors())
 app.use(cors({
-origin: ["http://localhost:3001", "http://localhost:3000"], // keep in sync with Socket.IO
-credentials: true
+  origin: [
+    "http://localhost:3000", 
+    "http://localhost:3001",
+    process.env.FRONTEND_URL || "http://localhost:3000"
+  ],
+  credentials: true
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
