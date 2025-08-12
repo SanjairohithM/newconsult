@@ -29,6 +29,7 @@ const io = socketIo(server, {
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
+      "https://newconsult.netlify.app",
       process.env.FRONTEND_URL || "http://localhost:3000"
     ],
     methods: ["GET", "POST"],
@@ -41,6 +42,7 @@ app.use(cors({
   origin: [
     "http://localhost:3000", 
     "http://localhost:3001",
+    "https://newconsult.netlify.app",
     process.env.FRONTEND_URL || "http://localhost:3000"
   ],
   credentials: true
