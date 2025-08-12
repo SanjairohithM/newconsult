@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import API_BASE_URL from "../../config/api"
 import { MessageCircle, Calendar, Clock, User, Search } from "lucide-react"
 import ClientLayout from "../../components/ClientLayout"
 
@@ -17,7 +18,7 @@ const MessagesPage = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("/api/appointments")
+      const response = await axios.get(`${API_BASE_URL}/api/appointments`)
       setAppointments(response.data)
     } catch (error) {
       console.error("Error fetching appointments:", error)

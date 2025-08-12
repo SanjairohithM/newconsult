@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Calendar, Video, MessageCircle, Clock, User, Phone, AlertCircle, Send } from "lucide-react"
 import ClientLayout from "../components/ClientLayout"
 import { useSocket } from "../contexts/SocketContext"
+import API_BASE_URL from "../config/api"
 
 export default function SessionPage() {
   const { id } = useParams()
@@ -25,7 +26,7 @@ export default function SessionPage() {
         return
       }
 
-      const response = await fetch(`/api/appointments/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/appointments/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -50,7 +51,7 @@ export default function SessionPage() {
       const token = localStorage.getItem("token")
       if (!token) return
 
-      const response = await fetch(`/api/messages/appointment/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/messages/appointment/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -70,11 +71,13 @@ export default function SessionPage() {
       const token = localStorage.getItem("token")
       if (!token) return
 
-      await fetch(`/api/messages/mark-read/${id}`, {
-        method: "PUT",
+      await fetch(`${API_BASE_URL}/api/messages/read`, {
+        method: "PATCH",
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ appointmentId: id })
       })
     } catch (error) {
       console.error("Error marking messages as read:", error)
@@ -141,7 +144,7 @@ export default function SessionPage() {
       }
 
       // Also save to database
-      const response = await fetch("/api/messages", {
+      const response = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

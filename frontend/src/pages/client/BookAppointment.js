@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 
 export default function BookAppointment() {
   const [counselors, setCounselors] = useState([]);
@@ -15,7 +16,7 @@ export default function BookAppointment() {
 
   useEffect(() => {
     // Fetch counselors (using public endpoint)
-    axios.get('/api/counselors')
+    axios.get(`${API_BASE_URL}/api/counselors`)
       .then(res => setCounselors(res.data))
       .catch(() => setCounselors([]));
   }, []);
@@ -29,7 +30,7 @@ export default function BookAppointment() {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.post('/api/appointments', form, { withCredentials: true });
+      const res = await axios.post(`${API_BASE_URL}/api/appointments`, form, { withCredentials: true });
       setMessage(res.data.message || 'Appointment booked!');
     } catch (err) {
       setMessage(err.response?.data?.message || 'Booking failed');

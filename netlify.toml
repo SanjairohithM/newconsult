@@ -6,6 +6,8 @@
 [build.environment]
   NODE_VERSION = "18"
   CI = "false"
+  REACT_APP_API_URL = "https://newconsult-backend.onrender.com"
+  REACT_APP_SOCKET_URL = "https://newconsult-backend.onrender.com"
 
 [[redirects]]
   from = "/*"

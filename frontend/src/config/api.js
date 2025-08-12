@@ -1,10 +1,10 @@
 // API Configuration for different environments
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Development: localhost:5000, Production: your backend domain
+// Development: localhost:5000, Production: Render backend domain
 const API_BASE_URL = isDevelopment 
   ? 'http://localhost:5000' 
-  : process.env.REACT_APP_API_URL || 'https://your-backend-domain.com';
+  : process.env.REACT_APP_API_URL || 'https://newconsult-backend.onrender.com';
 
 // Socket.IO URL (same as API for now)
 const SOCKET_URL = isDevelopment 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api';
 
 export default function PaymentsPage() {
   const [payments, setPayments] = useState([]);
@@ -7,7 +8,7 @@ export default function PaymentsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('/api/payments', { withCredentials: true })
+    axios.get(`${API_BASE_URL}/api/payments`, { withCredentials: true })
       .then(res => setPayments(res.data))
       .catch(() => setError('Failed to load payments'))
       .finally(() => setLoading(false));

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import API_BASE_URL from "../../config/api"
 import { Calendar, Video, MessageCircle, Clock, Star, Plus, Search, X, MapPin, Copy, ChevronLeft, ChevronRight } from "lucide-react"
 import ClientLayout from "../../components/ClientLayout"
 
@@ -57,7 +58,7 @@ const ClientDashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("/api/appointments")
+      const response = await axios.get(`${API_BASE_URL}/api/appointments`)
       setAppointments(response.data)
     } catch (error) {
       console.error("Error fetching appointments:", error)
@@ -69,7 +70,7 @@ const ClientDashboard = () => {
   const fetchCounselors = async () => {
     setSearchLoading(true)
     try {
-      const response = await axios.get("/api/counselors")
+      const response = await axios.get(`${API_BASE_URL}/api/counselors`)
       setCounselors(response.data)
       setFilteredCounselors(response.data)
     } catch (error) {

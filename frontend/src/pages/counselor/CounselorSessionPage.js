@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Calendar, Video, MessageCircle, Clock, User, Phone, AlertCircle, Send, Save } from "lucide-react"
 import CounselorLayout from "../../components/CounselorLayout"
 import { useSocket } from "../../contexts/SocketContext"
+import API_BASE_URL from "../../config/api"
 
 export default function CounselorSessionPage() {
   const { id } = useParams()
@@ -27,7 +28,7 @@ export default function CounselorSessionPage() {
         return
       }
 
-      const response = await fetch(`/api/appointments/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/appointments/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -53,7 +54,7 @@ export default function CounselorSessionPage() {
       const token = localStorage.getItem("token")
       if (!token) return
 
-      const response = await fetch(`/api/messages/appointment/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/messages/appointment/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -73,11 +74,13 @@ export default function CounselorSessionPage() {
       const token = localStorage.getItem("token")
       if (!token) return
 
-      await fetch(`/api/messages/mark-read/${id}`, {
-        method: "PUT",
+      await fetch(`${API_BASE_URL}/api/messages/read`, {
+        method: "PATCH",
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ appointmentId: id })
       })
     } catch (error) {
       console.error("Error marking messages as read:", error)
@@ -144,7 +147,7 @@ export default function CounselorSessionPage() {
       }
 
       // Also save to database
-      const response = await fetch("/api/messages", {
+      const response = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,15 +184,13 @@ export default function CounselorSessionPage() {
       const token = localStorage.getItem("token")
       if (!token) return
 
-      const response = await fetch(`/api/appointments/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/appointments/${id}/notes`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({
-          notes: sessionNotes.trim()
-        })
+        body: JSON.stringify({ sessionNotes: sessionNotes.trim() })
       })
 
       if (response.ok) {
